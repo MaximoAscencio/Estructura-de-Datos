@@ -1,0 +1,15 @@
+import tkinter as tk
+from tkinter import simpledialog
+
+root = tk.Tk()
+root.withdraw()
+
+calificaciones = [0] * 5
+
+for i in range(5):
+    entrada = simpledialog.askstring("Entrada", "captura la calificación:")
+    
+    if entrada is not None:
+        calificaciones[i] = int(entrada)
+
+print("Calificaciones capturadas:", calificaciones)
