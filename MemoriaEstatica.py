@@ -4,7 +4,7 @@ from tkinter import simpledialog
 root = tk.Tk()
 root.withdraw()
 
-calificaciones = [0] * 5
+calificaciones = [0] * 5 
 
 for i in range(5):
     entrada = simpledialog.askstring("Entrada", "captura la calificación:")
