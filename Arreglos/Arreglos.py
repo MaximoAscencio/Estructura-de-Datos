@@ -1,8 +1,8 @@
-DEPARTAMENTOS = ["Ropa", "Deportes", "Juguetería"]
+DEPARTAMENTOS = ["Ropa", "Deportes", "Juguetería"].lower()
 MESES = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-]
+].lower()
 
 class ControlVentas:
     def __init__(self):
