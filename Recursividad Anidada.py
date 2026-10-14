@@ -3,9 +3,6 @@ def sanitizar_ruta(ruta: str) -> str:
     if "../" not in ruta:
         return ruta
     
-    # RECURSIVIDAD ANIDADA: f(f(x))
-    # La llamada interna elimina la primera coincidencia.
-    # La llamada externa vuelve a validar todo el resultado devuelto por la interna.
     return sanitizar_ruta(sanitizar_ruta(ruta.replace("../", "", 1)))
 
 
