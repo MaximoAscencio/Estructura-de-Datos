@@ -49,7 +49,7 @@ print("Cola B:", cola_b.elementos)
 resultado = sumar_colas(cola_a, cola_b)
 
 if resultado is not None:
-    print("Cola Resultado:", resultado.elementos)
+    print("Cola R:", resultado.elementos)
 
 
 
