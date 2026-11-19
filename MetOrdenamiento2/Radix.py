@@ -31,7 +31,8 @@ DESCRIPCION = ("Ordena dígito por dígito (unidades, decenas, centenas...) "
                "repartiendo los números en 10 cubetas, sin compararlos entre sí.")
 
 NOMBRES = ["unidades", "decenas", "centenas", "unidades de millar",
-           "decenas de millar", "centenas de millar"]
+           "decenas de millar", "centenas de millar", "unidades de millón",
+           "decenas de millón", "centenas de millón"]
 
 
 def radix_positivos(datos, pasos, etiqueta=""):
