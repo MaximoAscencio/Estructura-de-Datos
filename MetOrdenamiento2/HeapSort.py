@@ -4,8 +4,8 @@ Ejercicio 3: Método de Ordenamiento Heapsort
 Problema:
     En la sala de urgencias de un hospital, a cada paciente se le asigna un
     nivel de prioridad numérico al llegar. Se necesita ordenar los niveles de
-    prioridad de MENOR a MAYOR para organizar el orden de atención. El
-    programa pide cuántos niveles (números) se van a capturar, los lee y los
+    prioridad de MENOR a MAYOR para organizar el orden de atención. La
+    ventana pide cuántos niveles (números) se van a capturar, los lee y los
     ordena con Heapsort.
 
 Funcionamiento:
@@ -25,14 +25,10 @@ Complejidad: O(n log n) en el mejor, promedio y peor caso. No necesita
 memoria adicional: O(1).
 """
 
+from interfaz import VentanaOrdenamiento, mostrar_lista, formatear
 
-def formatear(numero):
-    """Muestra 5.0 como 5 y deja 5.5 como 5.5."""
-    return str(int(numero)) if float(numero).is_integer() else str(numero)
-
-
-def mostrar_lista(lista):
-    return "[" + ", ".join(formatear(x) for x in lista) + "]"
+DESCRIPCION = ("Acomoda los datos en un montículo máximo (el mayor queda en la "
+               "raíz), lo manda al final y vuelve a acomodar el montículo.")
 
 
 def heapify(datos, tamano, raiz):
@@ -52,70 +48,27 @@ def heapify(datos, tamano, raiz):
         heapify(datos, tamano, mayor)
 
 
-def heap_sort(lista, mostrar_pasos=True):
+def heap_sort(lista):
+    """Regresa la lista ordenada y la lista de pasos realizados."""
     datos = lista.copy()
+    pasos = []
     n = len(datos)
 
     # 1. Construir el montículo máximo.
     for i in range(n // 2 - 1, -1, -1):
         heapify(datos, n, i)
-    if mostrar_pasos:
-        print(f"  Montículo máximo inicial: {mostrar_lista(datos)}")
+    pasos.append(f"Montículo máximo inicial: {mostrar_lista(datos)}")
 
     # 2. Sacar el mayor y volver a acomodar el montículo.
     for fin in range(n - 1, 0, -1):
         datos[0], datos[fin] = datos[fin], datos[0]
         heapify(datos, fin, 0)
-        if mostrar_pasos:
-            print(f"  Se coloca {formatear(datos[fin])} al final: "
-                  f"{mostrar_lista(datos)}")
+        pasos.append(f"Se coloca {formatear(datos[fin])} al final: "
+                     f"{mostrar_lista(datos)}")
 
-    return datos
-
-
-def pedir_cantidad():
-    while True:
-        try:
-            cantidad = int(input("¿Cuántos números vas a ingresar? "))
-            if cantidad > 0:
-                return cantidad
-            print("  La cantidad debe ser mayor que 0.")
-        except ValueError:
-            print("  Escribe un número entero.")
-
-
-def pedir_numeros(cantidad):
-    numeros = []
-    for i in range(cantidad):
-        while True:
-            try:
-                numeros.append(float(input(f"  Número {i + 1}: ")))
-                break
-            except ValueError:
-                print("  Valor no válido, escribe un número.")
-    return numeros
-
-
-def menu():
-    while True:
-        print("\n========== MÉTODO HEAPSORT ==========")
-        print("1. Ingresar números y ordenarlos")
-        print("2. Salir")
-        opcion = input("Elige una opción: ").strip()
-
-        if opcion == "1":
-            cantidad = pedir_cantidad()
-            numeros = pedir_numeros(cantidad)
-            print(f"\nLista original: {mostrar_lista(numeros)}")
-            print("Proceso de Heapsort:")
-            ordenados = heap_sort(numeros)
-            print(f"\nLista ordenada: {mostrar_lista(ordenados)}")
-        elif opcion == "2":
-            print("Saliendo del programa...")
-            break
-        else:
-            print("Opción no válida, intenta de nuevo.")
+    return datos, pasos
 
 
 if __name__ == "__main__":
-    menu()
+    VentanaOrdenamiento({"Heapsort": (heap_sort, False, DESCRIPCION)},
+                        "Método de Ordenamiento Heapsort").iniciar()

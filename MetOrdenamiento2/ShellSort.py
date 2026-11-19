@@ -4,7 +4,7 @@ Ejercicio 1: Método de Ordenamiento ShellSort
 Problema:
     Una tienda de abarrotes captura los precios de sus productos en el orden
     en que llegan del proveedor y necesita ordenarlos de MENOR a MAYOR para
-    acomodar su lista de precios. El programa pide cuántos precios (números)
+    acomodar su lista de precios. La ventana pide cuántos precios (números)
     se van a capturar, los lee y los ordena con ShellSort.
 
 Funcionamiento:
@@ -21,18 +21,16 @@ el peor caso es O(n^2) y en la práctica se comporta cerca de O(n^1.5).
 No necesita memoria adicional: O(1).
 """
 
+from interfaz import VentanaOrdenamiento, mostrar_lista
 
-def formatear(numero):
-    """Muestra 5.0 como 5 y deja 5.5 como 5.5."""
-    return str(int(numero)) if float(numero).is_integer() else str(numero)
-
-
-def mostrar_lista(lista):
-    return "[" + ", ".join(formatear(x) for x in lista) + "]"
+DESCRIPCION = ("Ordena comparando elementos separados por un salto que se "
+               "reduce a la mitad en cada vuelta, hasta llegar a 1.")
 
 
-def shell_sort(lista, mostrar_pasos=True):
+def shell_sort(lista):
+    """Regresa la lista ordenada y la lista de pasos realizados."""
     datos = lista.copy()
+    pasos = []
     n = len(datos)
     salto = n // 2
     vuelta = 1
@@ -47,57 +45,15 @@ def shell_sort(lista, mostrar_pasos=True):
                 datos[j] = datos[j - salto]
                 j -= salto
             datos[j] = temporal
-        if mostrar_pasos:
-            print(f"  Vuelta {vuelta} (salto = {salto}): {mostrar_lista(datos)}")
+        pasos.append(f"Vuelta {vuelta} (salto = {salto}): {mostrar_lista(datos)}")
         salto //= 2
         vuelta += 1
 
-    return datos
-
-
-def pedir_cantidad():
-    while True:
-        try:
-            cantidad = int(input("¿Cuántos números vas a ingresar? "))
-            if cantidad > 0:
-                return cantidad
-            print("  La cantidad debe ser mayor que 0.")
-        except ValueError:
-            print("  Escribe un número entero.")
-
-
-def pedir_numeros(cantidad):
-    numeros = []
-    for i in range(cantidad):
-        while True:
-            try:
-                numeros.append(float(input(f"  Número {i + 1}: ")))
-                break
-            except ValueError:
-                print("  Valor no válido, escribe un número.")
-    return numeros
-
-
-def menu():
-    while True:
-        print("\n========== MÉTODO SHELLSORT ==========")
-        print("1. Ingresar números y ordenarlos")
-        print("2. Salir")
-        opcion = input("Elige una opción: ").strip()
-
-        if opcion == "1":
-            cantidad = pedir_cantidad()
-            numeros = pedir_numeros(cantidad)
-            print(f"\nLista original: {mostrar_lista(numeros)}")
-            print("Proceso de ShellSort:")
-            ordenados = shell_sort(numeros)
-            print(f"\nLista ordenada: {mostrar_lista(ordenados)}")
-        elif opcion == "2":
-            print("Saliendo del programa...")
-            break
-        else:
-            print("Opción no válida, intenta de nuevo.")
+    if not pasos:
+        pasos.append("Solo hay un número, no hay nada que ordenar.")
+    return datos, pasos
 
 
 if __name__ == "__main__":
-    menu()
+    VentanaOrdenamiento({"ShellSort": (shell_sort, False, DESCRIPCION)},
+                        "Método de Ordenamiento ShellSort").iniciar()

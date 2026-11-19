@@ -4,7 +4,7 @@ Ejercicio 2: Método de Ordenamiento Quicksort
 Problema:
     En un torneo de un videojuego se registran los puntajes de los jugadores
     conforme terminan sus partidas. Al final se necesita ordenar todos los
-    puntajes de MENOR a MAYOR para armar la tabla de posiciones. El programa
+    puntajes de MENOR a MAYOR para armar la tabla de posiciones. La ventana
     pide cuántos puntajes (números) se van a capturar, los lee y los ordena
     con Quicksort.
 
@@ -22,14 +22,10 @@ el peor caso (cuando el pivote siempre queda en un extremo, por ejemplo con
 una lista ya ordenada). Usa O(log n) de memoria por la recursión.
 """
 
+from interfaz import VentanaOrdenamiento, mostrar_lista, formatear
 
-def formatear(numero):
-    """Muestra 5.0 como 5 y deja 5.5 como 5.5."""
-    return str(int(numero)) if float(numero).is_integer() else str(numero)
-
-
-def mostrar_lista(lista):
-    return "[" + ", ".join(formatear(x) for x in lista) + "]"
+DESCRIPCION = ("Elige un pivote, deja los menores a su izquierda y los mayores "
+               "a su derecha, y repite el proceso con cada parte (divide y vencerás).")
 
 
 def particion(datos, inicio, fin):
@@ -43,67 +39,26 @@ def particion(datos, inicio, fin):
     return i + 1
 
 
-def _quick_sort(datos, inicio, fin, mostrar_pasos, contador):
+def _quick_sort(datos, inicio, fin, pasos):
     if inicio < fin:
         pivote = datos[fin]
         posicion = particion(datos, inicio, fin)
-        if mostrar_pasos:
-            contador[0] += 1
-            print(f"  Partición {contador[0]} (pivote = {formatear(pivote)}): "
-                  f"{mostrar_lista(datos)}")
-        _quick_sort(datos, inicio, posicion - 1, mostrar_pasos, contador)
-        _quick_sort(datos, posicion + 1, fin, mostrar_pasos, contador)
+        pasos.append(f"Partición {len(pasos) + 1} (pivote = {formatear(pivote)}): "
+                     f"{mostrar_lista(datos)}")
+        _quick_sort(datos, inicio, posicion - 1, pasos)
+        _quick_sort(datos, posicion + 1, fin, pasos)
 
 
-def quick_sort(lista, mostrar_pasos=True):
+def quick_sort(lista):
+    """Regresa la lista ordenada y la lista de pasos realizados."""
     datos = lista.copy()
-    _quick_sort(datos, 0, len(datos) - 1, mostrar_pasos, [0])
-    return datos
-
-
-def pedir_cantidad():
-    while True:
-        try:
-            cantidad = int(input("¿Cuántos números vas a ingresar? "))
-            if cantidad > 0:
-                return cantidad
-            print("  La cantidad debe ser mayor que 0.")
-        except ValueError:
-            print("  Escribe un número entero.")
-
-
-def pedir_numeros(cantidad):
-    numeros = []
-    for i in range(cantidad):
-        while True:
-            try:
-                numeros.append(float(input(f"  Número {i + 1}: ")))
-                break
-            except ValueError:
-                print("  Valor no válido, escribe un número.")
-    return numeros
-
-
-def menu():
-    while True:
-        print("\n========== MÉTODO QUICKSORT ==========")
-        print("1. Ingresar números y ordenarlos")
-        print("2. Salir")
-        opcion = input("Elige una opción: ").strip()
-
-        if opcion == "1":
-            cantidad = pedir_cantidad()
-            numeros = pedir_numeros(cantidad)
-            print(f"\nLista original: {mostrar_lista(numeros)}")
-            print("Proceso de Quicksort:")
-            ordenados = quick_sort(numeros)
-            print(f"\nLista ordenada: {mostrar_lista(ordenados)}")
-        elif opcion == "2":
-            print("Saliendo del programa...")
-            break
-        else:
-            print("Opción no válida, intenta de nuevo.")
+    pasos = []
+    _quick_sort(datos, 0, len(datos) - 1, pasos)
+    if not pasos:
+        pasos.append("Solo hay un número, no hay nada que ordenar.")
+    return datos, pasos
 
 
 if __name__ == "__main__":
-    menu()
+    VentanaOrdenamiento({"Quicksort": (quick_sort, False, DESCRIPCION)},
+                        "Método de Ordenamiento Quicksort").iniciar()
